@@ -21,15 +21,15 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-	xterm-color)
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u\[\033[1;31m\]@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\n\$ '
-		;;
-	*)
-		#	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-		PS1='\[\033[1;35m\]\u\[\033[1;31m\]@\h\[\033[00m\]:\[\033[1;33m\]\W\[\033[1;36m\]$(git_info)\[\033[00m\]\n\$ '
-		;;
-esac
+#case "$TERM" in
+#	xterm-color)
+#		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u\[\033[1;31m\]@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\n\$ '
+#		;;
+#	*)
+#		#	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+#		PS1='\[\033[1;35m\]\u\[\033[1;31m\]@\h\[\033[00m\]:\[\033[1;33m\]\W\[\033[1;36m\]$(git_info)\[\033[00m\]\n\$ '
+#		;;
+#esac
 
 # Comment in the above and uncomment this below for a color prompt
 #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -127,8 +127,9 @@ export NVM_DIR="$HOME/.nvm"
 
 export EDITOR=vim
 export GDFONTPATH="$HOME/share/fonts"
-# export LANG=en_US.UTF-8
-export LANG=zh_TW.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+#export LANG=zh_TW.UTF-8
 export PATH="$PATH:$HOME/bin:$HOME/.aspera/connect/bin:/usr/local/sbin"
 export WORKON_HOME="$HOME/.virtualenvs/"
 
@@ -229,6 +230,8 @@ function rmold() {
 	find . -maxdepth 1 -mtime +$1 -exec rm -rf {} \;
 }
 
+
+
 # Automatically activate Git projects' virtual environments based on the
 # directory name of the project. Virtual environment name can be overridden
 # by placing a .venv file in the project root with a virtualenv name in it
@@ -263,5 +266,23 @@ function venv_cd {
 
 # Initinalize
 workon_cwd
+
+#export PATH="$HOME/.rbenv/bin:$PATH"
+#eval "$(rbenv init -)"
+#export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+
+# virtualenv 
+if [ -f /usr/local/bin/virtualenvwrapper.sh ];then
+
+        export WORKON_HOME=$HOME/.virtualenvs
+        export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+        source /usr/local/bin/virtualenvwrapper.sh
+fi
+
+
+# Created by `pipx` on 2023-03-21 06:26:18
+export PATH="$PATH:/home/jackwu/.local/bin"
+eval "$(register-python-argcomplete3 pipx)"
+
 
 # vi:nowrap:sw=4:ts=4

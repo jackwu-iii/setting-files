@@ -1,56 +1,100 @@
+"execute pathogen#infect()
+"filetype plugin indent on    " required
 " #########################################################################
 " language
 
-lang ja_JP
+" lang zh_TW
 set encoding=utf-8
 " #########################################################################
 " minpac
 
+" Normally this if-block is not needed, because `:set nocp` is done
+" automatically when .vimrc is found. However, this might be useful
+" when you execute `vim -u .vimrc` from the command line.
+if &compatible
+  " `:set nocp` has many side effects. Therefore this should be done
+  " only when 'compatible' is set.
+  set nocompatible
+endif
+
 packadd minpac
 
-call minpac#init()
+if !exists('g:loaded_minpac')
+  " minpac is not available.
 
-" minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
-call minpac#add('k-takata/minpac', {'type': 'opt'})
+  " Settings for plugin-less environment.
+  
+else
 
-" Add other plugins here.
-call minpac#add('tabnine/YouCompleteMe')
-call minpac#add('airblade/vim-gitgutter')
-call minpac#add('digitaltoad/vim-pug')
-call minpac#add('isRuslan/vim-es6')
-call minpac#add('klen/python-mode')
-call minpac#add('nathanaelkane/vim-indent-guides')
-call minpac#add('ntpeters/vim-better-whitespace')
-call minpac#add('othree/yajs.vim')
-call minpac#add('posva/vim-vue')
-call minpac#add('tpope/vim-abolish')
-call minpac#add('tpope/vim-git')
-call minpac#add('tpope/vim-haml')
-call minpac#add('vim-jp/syntax-vim-ex')
-call minpac#add('vim-syntastic/syntastic')
-call minpac#add('mustache/vim-mustache-handlebars')
-call minpac#add('fisadev/vim-isort')
-call minpac#add('powerman/vim-plugin-AnsiEsc')
-call minpac#add('nvie/vim-flake8')
+  call minpac#init()
 
-" Load the plugins right now. (optional)
-packloadall
+  " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
+
+  " Add other plugins here.
+  call minpac#add('tabnine/YouCompleteMe')
+  call minpac#add('airblade/vim-gitgutter')
+  call minpac#add('digitaltoad/vim-pug')
+  call minpac#add('isRuslan/vim-es6')
+  call minpac#add('klen/python-mode')
+  call minpac#add('nathanaelkane/vim-indent-guides')
+  call minpac#add('ntpeters/vim-better-whitespace')
+  call minpac#add('othree/yajs.vim')
+  call minpac#add('posva/vim-vue')
+  call minpac#add('tpope/vim-abolish')
+  call minpac#add('tpope/vim-git')
+  call minpac#add('tpope/vim-haml')
+  call minpac#add('vim-jp/syntax-vim-ex')
+  call minpac#add('vim-syntastic/syntastic')
+  call minpac#add('mustache/vim-mustache-handlebars')
+  call minpac#add('fisadev/vim-isort')
+  call minpac#add('powerman/vim-plugin-AnsiEsc')
+  call minpac#add('nvie/vim-flake8')
+
+  " Additional plugins here.
+  
+
+  " Plugin settings here.
+  
+  " Load the plugins right now. (optional)
+  packloadall
+
+endif
+
+" Common settings here.
+
 
 hi link stylusProperty cssVisualProp
 
-colorscheme default
+set t_Co=256
+colo torte
+colorscheme torte
+
+" ##########################################################################
+" color hybrid
+"set background=dark
+"let g:hybrid_custom_term_colors = 1
+"let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
+"colorscheme hybrid
+
+" ##########################################################################
+" color molokai
+"let g:rehash256 = 1
+"colorscheme molokai
+
 " #########################################################################
 " color term
 
 " If no screen, use color term
+
 if ($TERM == "vt100")
   set t_Co=8
   set t_AF=[1;3%p1%dm
   set t_AB=[4%p1%dm
 endif
-set t_Co=8
-set t_AF=[1;3%p1%dm
-set t_AB=[4%p1%dm
+"set t_Co=8
+"set t_AF=[1;3%p1%dm
+"set t_AB=[4%p1%dm
 
 " #########################################################################
 " default vimrc files
@@ -61,6 +105,67 @@ endif
 if filereadable($VIMRUNTIME . "/macros/matchit.vim")
   so $VIMRUNTIME/macros/matchit.vim
 endif
+
+" #########################################################################
+" Vundle
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+"set rtp+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+"Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+"Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+"Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" ----------------------------------------
+" indent-guides plugin
+"Plugin 'nathanaelkane/vim-indent-guides'
+" papercolor-theme
+"Plugin 'NLKNguyen/papercolor-theme'
+" python Completor
+"Plugin 'maralla/completor.vim'
+
+
+" All of your Plugins must be added before the following line
+"call vundle#end()            " required
+
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"
+
+" #########################################################################
+
+
 
 " #########################################################################
 " settings
@@ -79,15 +184,15 @@ set nocompatible " nocompatible with vi
 set noexpandtab
 set nosmartindent
 set nowrap
-set nu
+set nonu "nu
 set redrawtime=10000
 set rtp+=/usr/local/opt/fzf
 set ruler " show current line and column position
 set shiftwidth=4
 set showmatch " show the match { ( <
-set spell
-set spellfile=$HOME/Cloud/MEGAsync/vim/spell/en.utf-8.add
-set spelllang=en
+"set spell
+"set spellfile=$HOME/Cloud/MEGAsync/vim/spell/en.utf-8.add
+"set spelllang=en
 set tabstop=4
 set undodir=~/tmp
 set viminfo='20,\"50	" read/write a .viminfo file, don't store more
@@ -105,6 +210,7 @@ if version >= 600
   set foldlevel=1
   set foldmethod=marker " no auto folding
   set nohlsearch " no highlight search
+  hi Search cterm=reverse ctermbg=none ctermfg=none
   set termencoding=utf-8
 else
   set fileencoding=taiwan
@@ -252,7 +358,7 @@ autocmd QuickFixCmdPost    l* nested lwindow
 if !exists("g:ycm_semantic_triggers")
   let g:ycm_semantic_triggers = {}
 endif
-" let g:ycm_semantic_triggers['typescript'] = ['re!\w*[^"]+.']
+ let g:ycm_semantic_triggers['typescript'] = ['re!\w*[^"]+.']
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<Enter>']
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
