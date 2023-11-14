@@ -141,6 +141,7 @@ hs.hotkey.bind({'cmd', 'alt'}, 'r', function()
     local win = hs.window.focusedWindow()
     if win ~= nil then
         cell = hs.grid.get(win)
+        cell.y = 0
         cell.w = 1
         cell.h = 2
         hs.grid.set(win, cell)
@@ -148,24 +149,58 @@ hs.hotkey.bind({'cmd', 'alt'}, 'r', function()
     hs.timer.doAfter(1, function() wf_all:resume() end)
 end)
 
--- reconnect wifi
+-- webserver
 
-secrets = hs.json.read(".secrets.json")
+server = hs.httpserver.new(false, true)
+server:setInterface('en0')
+server:setPort(11211)
+server:setCallback(function(method, path, headers, body)
+    blocking = true
+    hs.keycodes.currentSourceID(body)
+    hs.timer.doAfter(0.5, function() blocking = false end)
+    return 'OK', 200, {}
+end)
+server:start()
 
-ssid = secrets.wifiSSID
-passpharse = secrets.wifiPasspharse
+bonjour = hs.bonjour.new()
+remote_address = nil
+remote_port = nil
+hs.timer.doAfter(1, function()
+    bonjour:findServices('_http._tcp', 'local.', function(b, d, a, s)
+        s:resolve(0.0, function(r)
+            address = r:addresses()[1]
+            if address == '127.0.0.1' then
+                return
+            end
+            remote_address = address
+            remote_port = r:port()
+            bonjour:stop()
+        end)
+    end)
+end)
 
+-- input source
 
-function checkAndReconnectWifi()
-    local currentNetwork = hs.wifi.currentNetwork()
-    if currentNetwork == nil then
-        hs.alert.show('no network')
-        hs.wifi.associate(ssid, passpharse)
+local blocking = false
+
+local current_source_id = hs.keycodes.currentSourceID()
+
+function onInputSourceChanged()
+    next_source_id = hs.keycodes.currentSourceID()
+    if not blocking and next_source_id ~= current_source_id then
+        blocking = true
+        current_source_id = next_source_id
+        hs.http.asyncPost(
+            'http://' .. remote_address .. ':' .. remote_port,
+            hs.keycodes.currentSourceID(),
+            {},
+            function() end
+        )
+        hs.timer.doAfter(0.5, function() blocking = false end)
     end
 end
 
+hs.keycodes.inputSourceChanged(onInputSourceChanged)
 
-checkAndReconnectWifi()
-timer = hs.timer.doEvery(1, checkAndReconnectWifi)
 
 -- vim:sw=4:ts=4:sts=4:et
