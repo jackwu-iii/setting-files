@@ -8,6 +8,10 @@ git clone https://github.com/k-takata/minpac.git ~/.vim/pack/minpac/opt/minpac
 # copy gitconfig
 \cp gitconfig ~/.gitconfig
 
+# install tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
 # copy tmux conf
 \cp tmux.conf ~/.tmux.conf
 
